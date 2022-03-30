@@ -1,19 +1,17 @@
 """
 Классы и их методы, реализующие алгоритм Chord
-
 """
+
 import numpy as np
 import copy
 
-
+# Таблица
 class finger:
-    # Класс finger (таблица)
     def __init__(self):
         self.start = []
         self.interval = []
         self.node = []
         self.successor = []
-
 
 class ChordNode:
     # Класс ChordNode
@@ -40,9 +38,8 @@ class ChordNode:
             if k == 0:
                 self.finger[i].node.append(m_arPos[0])
 
-
+# Класс, реализующий функции
 class ChordArray:
-    # Класс, реализующий функции
     def __init__(self, M_intN, m_arPos):
         self.m = M_intN
         self.arPos = m_arPos
@@ -75,14 +72,6 @@ class ChordArray:
 
     def find_predecessor(self, m_arPos, id_n, id):
         n_ = copy.deepcopy(self.myArray[id_n])
-        """
-        if (self.myArray[id_n].finger[0].node[0]>=m_arPos[id_n]):
-            left=m_arPos[id_n]
-            right = self.myArray[id_n].finger[0].node[0]
-        else:
-            left = self.myArray[id_n].finger[0].node[0]
-            right = m_arPos[id_n]
-        """
         left = m_arPos[id_n]
         right = self.myArray[id_n].finger[0].node[0]
         if self.myArray[id_n].finger[0].node[0] == 0:
@@ -90,15 +79,6 @@ class ChordArray:
         while (id < left) or (id > right):
             id_n = self.closest_preceding_finger(m_arPos, id_n, id)
             n_ = copy.deepcopy(self.myArray[id_n])
-            """
-            if (self.myArray[id_n].finger[0].node[0] >= m_arPos[id_n]):
-                left = m_arPos[id_n]
-                right = self.myArray[id_n].finger[0].node[0]
-            else:
-                left = self.myArray[id_n].finger[0].node[0]
-                right = m_arPos[id_n]
-            left = m_arPos[id_n]
-            """
             left = m_arPos[id_n]
             right = self.myArray[id_n].finger[0].node[0]
             if self.myArray[id_n].finger[0].node[0] == 0:
@@ -214,8 +194,8 @@ class ChordArray:
                     pos_new_id1 = k
                 k += 1
             self.update_finger_table_del(m_arPos, pos_new_id1, s, succeccor_id, i)
+            
             # Добавление для обновления крайнего узла
-            # if i == self.m - 2:
             pos_new_id1 = pos_new_id1 - 1
             if pos_new_id1 > 0:
                 pos_new_id1 = pos_new_id1 - 1
@@ -230,6 +210,7 @@ class ChordArray:
             if id_n == j:
                 pos_del = k
             k += 1
+        
         # ID следующего узла
         succeccor_id = self.find_successor(self.arPos, pos_del, id_n)
 
