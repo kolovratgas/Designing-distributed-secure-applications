@@ -1,7 +1,8 @@
 #Кол-во бит, используемых для генерации идентификаторов
 M_intM = 4
+
 #Идентификаторы позиций, в которых находятся узлы
-m_arPos = [0, 1, 2, 3]
+m_arPos = [0, 1, 3]
 
 from ChordNode import ChordArray
 
@@ -16,7 +17,7 @@ print('')
 for i in ChordArray_1.myArray:
     print('Таблица finger для узла с id', str(m_arPos[j]))
     for k in i.finger:
-        print('start: ' + str(k.start[0]) + '; interval: [' + str(k.interval[0]) + str(k.interval[1]) + '); node: ' + str(k.node[0]))
+        print('start: ' + str(k.start[0]) + '; interval: [' + str(k.interval[0]) + ',' + str(k.interval[1]) + '); node: ' + str(k.node[0]))
     j += 1
 
 #Проверка функции поиска узла
