@@ -24,12 +24,14 @@ class ChordNode:
         self.finger = []  # Пустой массив объектов
         for i in range(M_intN - 1):
             self.finger.append(finger())
-            self.finger[i].start.append((number + 2 ** i) % 2 ** (M_intN - 1))
+            self.finger[i].start.append((number + 2**i) % 2 ** (M_intN - 1))
             if i < M_intN - 2:
-                self.finger[i].interval.append((number + 2 ** i) % 2 ** (M_intN - 1))
-                self.finger[i].interval.append((number + 2 ** (i + 1)) % 2 ** (M_intN - 1))
+                self.finger[i].interval.append((number + 2**i) % 2 ** (M_intN - 1))
+                self.finger[i].interval.append(
+                    (number + 2 ** (i + 1)) % 2 ** (M_intN - 1)
+                )
             else:
-                self.finger[i].interval.append((number + 2 ** i) % 2 ** (M_intN - 1))
+                self.finger[i].interval.append((number + 2**i) % 2 ** (M_intN - 1))
                 self.finger[i].interval.append(number)
             k = 0
             for j in m_arPos:
@@ -57,7 +59,8 @@ class ChordArray:
         for i in reversed(range(self.m - 1)):
             if id >= m_arPos[id_n]:
                 if (self.myArray[id_n].finger[i].node[0] <= id) and (
-                        self.myArray[id_n].finger[i].node[0] > m_arPos[id_n]):
+                    self.myArray[id_n].finger[i].node[0] > m_arPos[id_n]
+                ):
                     for j in range(len(self.arPos)):
                         if self.myArray[id_n].finger[i].node[0] == self.arPos[j]:
                             idx = j
@@ -65,7 +68,9 @@ class ChordArray:
             else:
                 right = 2 ** (self.m - 1)
                 left = 0
-                if (self.myArray[id_n].finger[i].node[0] >= left) and (self.myArray[id_n].finger[i].node[0] < right):
+                if (self.myArray[id_n].finger[i].node[0] >= left) and (
+                    self.myArray[id_n].finger[i].node[0] < right
+                ):
                     for j in range(len(self.arPos)):
                         if self.myArray[id_n].finger[i].node[0] == self.arPos[j]:
                             idx = j
@@ -97,27 +102,41 @@ class ChordArray:
         num = len(self.arPos)
         self.myArray.append(ChordNode(self.m, self.arPos, self.arPos[num - 1]))
 
-        print('Таблица finger для добавленного узла с id', str(self.arPos[num - 1]))
+        print("Таблица finger для добавленного узла с id", str(self.arPos[num - 1]))
         for k in self.myArray[num - 1].finger:
-            print('start: ' + str(k.start[0]) + '; interval: [' + str(k.interval[0]) + ','
-                  + str(k.interval[1]) + '); node: ' + str(k.node[0]))
+            print(
+                "start: "
+                + str(k.start[0])
+                + "; interval: ["
+                + str(k.interval[0])
+                + ","
+                + str(k.interval[1])
+                + "); node: "
+                + str(k.node[0])
+            )
 
         # Поиск ближайшего узла с id finger[0].start
         t = np.array(self.arPos)
         r = self.myArray[num - 1].finger[0].start[0]
-        id_start = np.argmin(abs(np.array(self.arPos) - self.myArray[num - 1].finger[0].start[0]))
-        self.myArray[num - 1].finger[0].node[0] = self.find_successor(self.arPos, id_start, id_n)
+        id_start = np.argmin(
+            abs(np.array(self.arPos) - self.myArray[num - 1].finger[0].start[0])
+        )
+        self.myArray[num - 1].finger[0].node[0] = self.find_successor(
+            self.arPos, id_start, id_n
+        )
 
     # Метод обновления других узлов
     def update_others(self, pos_new_id):
         for i in range(self.m - 1):
-            print('Поиск для обновления в цикле по i =', str(i))
+            print("Поиск для обновления в цикле по i =", str(i))
             # Поиск последнего узла p, чей i-й finger может быть n
-            t = self.arPos[pos_new_id] - 2 ** i
+            t = self.arPos[pos_new_id] - 2**i
             if t < 0:
                 t = 2 ** (self.m - 1) + t
-            p = self.find_predecessor(self.arPos, pos_new_id, self.arPos[pos_new_id] - 2 ** i)
-            print('Результат функции find_predecessor:', str(p.finger[2].interval[1]))
+            p = self.find_predecessor(
+                self.arPos, pos_new_id, self.arPos[pos_new_id] - 2**i
+            )
+            print("Результат функции find_predecessor:", str(p.finger[2].interval[1]))
             k = 0
             for j in self.arPos:
                 if p.finger[2].interval[1] == j:
@@ -133,7 +152,12 @@ class ChordArray:
             right = 2 ** (self.m - 1)
         if (s >= left) and (s < right):
             self.myArray[id_n].finger[i].node[0] = s
-            print('Обновлен node в узле ' + str(m_arPos[id_n]) + '; finger №' + str(m_arPos[i]))
+            print(
+                "Обновлен node в узле "
+                + str(m_arPos[id_n])
+                + "; finger №"
+                + str(m_arPos[i])
+            )
             r1 = self.find_predecessor(m_arPos, id_n, m_arPos[id_n])
             k = 0
             for j in self.arPos:
@@ -164,20 +188,22 @@ class ChordArray:
     # Метод обновления других узлов
     def update_others_del(self, pos_new_id, succeccor_id):
         for i in range(self.m - 1):
-            print('Поиск для обновления в цикле по i =', str(i))
+            print("Поиск для обновления в цикле по i =", str(i))
             # Поиск последнего узла p, чей i-й finger может быть n
-            t = self.arPos[pos_new_id] - 2 ** i
+            t = self.arPos[pos_new_id] - 2**i
             if t < 0:
                 t = 2 ** (self.m - 1) + t
             p = self.find_predecessor(self.arPos, pos_new_id, t)
-            print('Результат функции find_predecessor:', str(p.finger[2].interval[1]))
+            print("Результат функции find_predecessor:", str(p.finger[2].interval[1]))
             k = 0
             for j in self.arPos:
                 if p.finger[2].interval[1] == j:
                     pos_new_id_ = k
                 k += 1
             for j in range(self.m - 1):
-                self.update_finger_table_del(self.arPos, pos_new_id_, self.arPos[pos_new_id], succeccor_id, j)
+                self.update_finger_table_del(
+                    self.arPos, pos_new_id_, self.arPos[pos_new_id], succeccor_id, j
+                )
 
     # Обновление конкретной finger
     def update_finger_table_del(self, m_arPos, id_n, s, succeccor_id, i):
@@ -187,7 +213,12 @@ class ChordArray:
             right = 2 ** (self.m - 1)
         if self.myArray[id_n].finger[i].node[0] == s:
             self.myArray[id_n].finger[i].node[0] = succeccor_id
-            print('Обновлен node в узле ' + str(m_arPos[id_n]) + '; finger №' + str(m_arPos[i]))
+            print(
+                "Обновлен node в узле "
+                + str(m_arPos[id_n])
+                + "; finger №"
+                + str(m_arPos[i])
+            )
             r1 = self.find_predecessor(m_arPos, id_n, m_arPos[id_n])
             k = 0
             for j in self.arPos:
